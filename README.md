@@ -26,7 +26,7 @@ The three real-world temporal benchmarks (YAOG, WIKI and ICEWS18) could be downl
 We suggest to create a conda environment:
 ```bash
 conda create -n mtlearn python=3.8 numpy
-conda activate metlearn
+conda activate mtlearn
 ```
 
 ## How to Run
