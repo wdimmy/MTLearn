@@ -30,13 +30,10 @@ with open(Path(args.datafile_path), "r") as f:
         t = int(items[3])
         valid[t].append((items[0], items[1], items[2], t))
         valid_t.add(t)
-print(valid_t)
-print(valid)
 valid_t = sorted(list(valid_t))
 for i in range(args.window_size-1, len(valid_t)):
     i = valid_t[i]
     needed_timepoints = [i-j for j in range(1, args.window_size)]
-    print("needed_timepoints:", needed_timepoints)
     target_data = valid[i]
     for triplet in target_data:
          # the triplet is in the format of "predicate(subject, object)@timepoint"
@@ -44,13 +41,11 @@ for i in range(args.window_size-1, len(valid_t)):
         #  s = triplet.split("(")[1].split(",")[0]
         #  o = triplet.split("(")[1].split(",")[1].split(")")[0]
          golds[i].append((triplet[0], triplet[1], triplet[2]))
-    print("golds:", golds)
     chunked_data = []
     for j, t in enumerate(needed_timepoints):
         data = valid[t]
         for triplet in data:
             chunked_data.append("{}({},{})@{}".format(triplet[1], triplet[0], triplet[2], triplet[3]))
-    print("chunked_data:", chunked_data)
 
     D = load_dataset(chunked_data)
     coalescing_d(D)
