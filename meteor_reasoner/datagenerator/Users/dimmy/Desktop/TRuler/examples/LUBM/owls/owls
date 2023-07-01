@@ -1,0 +1,3 @@
+takesCourse(ID0,ID1)
+GraduateCourse(ID2)
+mastersDegreeFrom(ID3,ID4)
