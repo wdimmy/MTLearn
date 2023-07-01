@@ -23,11 +23,10 @@ The three real-world temporal benchmarks (YAOG, WIKI and ICEWS18) could be downl
 
 
 ## Installation
-We suggest to create a conda environment and then install the MeTeoR (the temporal reasoner we use):
+We suggest to create a conda environment:
 ```bash
 conda create -n mtlearn python=3.8 numpy
 conda activate metlearn
-pip install meteor-reasoner
 ```
 
 ## How to Run
