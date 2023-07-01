@@ -10,11 +10,10 @@
 - [Baselines](#Baseline)
 
 ## Datalog Rule Learners
-In this paper, we have tried three different kinds of Datalog Rule Learner, whose information are provided as follows:
+In this paper, we have tried the other two different kinds of Datalog Rule Learner, whose information are provided as follows:
 
 | Baselines   | Code                                                                      | 
 |-------------|---------------------------------------------------------------------------|
-| AnyBURL([Patrick Betz el al., 2022](https://link.springer.com/article/10.1007/s00778-023-00800-5))   | https://web.informatik.uni-mannheim.de/AnyBURL/AnyBURL-23-1.jar | 
 | AMIE+ ([Luis Galárraga et al., 2015](https://link.springer.com/article/10.1007/s00778-015-0394-1))    | https://github.com/dig-team/amie                                  | 
 | Popper([A Cropper et al., 2020](https://link.springer.com/article/10.1007/s10994-020-05934-z))      | https://github.com/logic-and-learning-lab/Popper   | 
 
