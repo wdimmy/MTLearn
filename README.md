@@ -1,6 +1,6 @@
 # MTLearn: Extracting Temporal Rules Using Datalog Rule Learners
 
-[Under Review] This repository contains the code for the paper submitted for IEEE ICDM 2023.
+[Under Review] This repository contains the code for the paper submitted for IJCAI 2024.
 
 ## Quick Links
 - [Installation](#Installation)
