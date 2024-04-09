@@ -48,7 +48,7 @@ After this, we can see a new folder 'Datalog', which obtain many files containin
 Next, we need to conver the Datalog rules into DatalogMTL, and we can run the following command 
 
 ```bash
-python rule_converter.py -data_dir data/YAGO
+python rule_converter.py --data_dir data/YAGO
 ```
 
 After this, we can see a new folder 'DatalogMTL', which obtain many files containing 'DatalogMTL' rules together with their confidence scores, and the number of files equals to the number of windows. 
