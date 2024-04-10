@@ -7,7 +7,6 @@
 - [Datalog Rule Learners](#Datalog-Rule-Learners)
 - [Datasets](#Datasets)
 - [How to Run](#How-to-Run)
-- [Baselines](#Baseline)
 
 ## Installation
 We suggest to create a conda environment:
