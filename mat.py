@@ -37,28 +37,23 @@ def check_head_body_variables(rule):
 
 
 class DatalogMTLReasoner:
-    def __init__(self, data_path, data_type="datalogmtl"):
-        # with open(rulepath) as file:
-        #     raw_program = file.readlines()
-        #     self.program = load_program(raw_program)
-        with open(data_path) as file:
-            lines = file.readlines()
-            if data_type == "quadruple":
-                raw_data = []
-                for line in lines: # convert quadruple to triple
-                    items = line.strip().split("\t")
-                    raw_data.append("{}({},{})@{}".format(items[1], items[0], items[2], items[3]))
-            else:
-                raw_data = lines[:]
-            self.data = [item.strip() for item in raw_data]
-            atemporal_data = set([item.split("@")[0] + "@1" for item in raw_data])
-            atemporal_data = list(atemporal_data)
-            self.D = load_dataset(raw_data)
-            self.Datalog = load_dataset(atemporal_data)
-            coalescing_d(self.Datalog)
-            coalescing_d(self.D)
-            self.D_index = build_index(self.D)
-            self.Datalog_index = build_index(self.Datalog)
+    def __init__(self, dataloader, data_type="datalogmtl"):
+        self.data = []
+        for t, triples in dataloader.train.items():
+            for triple in triples: # convert quadruple to triple
+                self.data.append("relation_{}(entity_{},entity_{})@{}".format(triple[1], triple[0], triple[2], t))
+
+        atemporal_data = set([item.split("@")[0] + "@1" for item in self.data])
+        atemporal_data = list(atemporal_data)
+
+        self.D = load_dataset(self.data)
+        self.Datalog = load_dataset(atemporal_data)
+
+        coalescing_d(self.Datalog)
+        coalescing_d(self.D)
+        self.D_index = build_index(self.D)
+        self.Datalog_index = build_index(self.Datalog)
+
         self.predicate_arity = {}
         for predicate in self.D:
             for entity in self.D[predicate]:
@@ -159,6 +154,7 @@ class DatalogMTLReasoner:
         try:
             derived_facts_dict = naive_immediate_consequence_operator([rule], self.D, self.D_index) if datalogmtl \
                 else naive_immediate_consequence_operator([rule], self.Datalog, self.Datalog_index)
+            
             scores["count_prediction"] = len(derived_facts_dict)
             template = "{}({})@{}"
             derived_facts = []
@@ -218,7 +214,6 @@ def employee_test():
     print(score)  # score
 
     # exit()
-
 
 
 if __name__ == "__main__":

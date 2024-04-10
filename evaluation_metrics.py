@@ -5,57 +5,6 @@ from meteor_reasoner.materialization.materialize import coalescing_d, naive_imme
 from meteor_reasoner.materialization.materialize import build_index
 from meteor_reasoner.utils.parser import parse_rule
 
-def calculate_hit(predictions, golds, hit=3):
-    """
-    Args:
-        predictions: {
-                       ("a", "r1", 21)] : ["b", "c"],
-                       ("b", "r2", 1)] :  ["d", "f"]
-                     }
-        golds: {
-                    21: [("a", "r1", "c")],
-                    23: [("b", "r2", "k")]
-                }
-        hit: 3
-    Returns: a float number
-    """
-    total_cnt = 0
-    hit_cnt = 0
-    for timestamp in golds:
-        for head, relation, tail in golds[timestamp]:
-            total_cnt += 1
-            if (head, relation, timestamp) in predictions:
-                candidates = predictions[(head, relation, timestamp)][:hit]
-                if tail in candidates:
-                    hit_cnt += 1
-    return round(hit_cnt / total_cnt, 3)
-
-
-def calculate_mrr(predictions, golds):
-    """
-    Args:
-        predictions: {
-                       ("a", "r1", 21)] : ["b", "c"],
-                       ("b", "r2", 1)] :  ["d", "f"]
-                     }
-        golds: {
-                    21: [("a", "r1", "c")],
-                    23: [("b", "r2", "k")]
-                }
-        hit: 3
-    Returns: a float number
-    """
-    total_cnt = 0
-    ranks = 0
-    for timestamp in golds:
-        for head, relation, tail in golds[timestamp]:
-            total_cnt += 1
-            if (head, relation, timestamp) in predictions:
-                candidates = predictions[(head, relation, timestamp)]
-                if tail in candidates:
-                    ranks += 1/(candidates.index(tail)+1)
-    return round(ranks / total_cnt, 3)
-
 
 def calculate_rq(rulefile_path, goldrules_path):
     """

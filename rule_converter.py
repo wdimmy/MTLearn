@@ -15,22 +15,23 @@ args = parser.parse_args()
 
 def convert_to_datalogmtl(rule):
     try:
-        rule = rule.replace("<=", ":-")
+        rule = rule.replace("<=", " :- ")
         rule = parse_rule(rule)
     except:
         return None 
     results = []
-    head_point = int(rule.head.get_predicate().split("_")[1])
+    head_point = int(rule.head.get_predicate().rpartition("_")[2])
 
     head_atom = rule.head
-    head_atom.atom.predicate = rule.head.get_predicate().split("_")[0]
+    head_atom.atom.predicate = rule.head.get_predicate().rpartition("_")[0]
     for body_atom in rule.body:
-        predicate_timepoint = int(body_atom.get_predicate().split("_")[1])
-        if predicate_timepoint >= head_point:
-            return None 
-        predicate_name = body_atom.get_predicate().split("_")[0]
+        predicate_timepoint = int(body_atom.get_predicate().rpartition("_")[2])
+        predicate_name = body_atom.get_predicate().rpartition("_")[0]
         body_atom.atom.predicate = predicate_name
-        operator = Operator("Boxminus", Interval(head_point - predicate_timepoint, head_point - predicate_timepoint, False, False))
+        if head_point <= predicate_timepoint:
+              operator = Operator("Boxplus", Interval(predicate_timepoint - head_point, predicate_timepoint - head_point, False, False))
+        else:
+              operator = Operator("Boxminus", Interval(head_point - predicate_timepoint, head_point - predicate_timepoint, False, False))
         atom = Literal(body_atom.atom, [operator])
         results.append(atom)
     rule = Rule(head_atom, results)
@@ -42,13 +43,10 @@ for filename in os.listdir(args.data_dir + "/Datalog"):
         continue
     with open(Path(args.data_dir)/f"Datalog/{filename}", "r") as f:
         lines = f.readlines()
-        print(lines)
         writer = open(Path(args.data_dir)/f"DatalogMTL/{filename}", "w")
         for line in lines:
-            print(line)
             items = line.strip().split("\t")
             rule = convert_to_datalogmtl(items[-1])
-            print(rule)
             if rule is None:
                 continue
             writer.write("{}\t{}\n".format(items[2], rule))

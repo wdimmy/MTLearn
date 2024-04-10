@@ -1,17 +1,21 @@
 import argparse
 from collections import defaultdict
 from mat import DatalogMTLReasoner
+from dataloader import DataLoader
 import os 
 
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--strategy', type=str, default='maximum', help='Please choose a strategy from maximum, weighted_maximum, average, weighted_average, and meteor')
 parser.add_argument('--beta', type=float, default=0.5, help='Specificy the beta value if using MeTeoR')
-parser.add_argument('--data_dir', type=str, default='data/demo', help='Path to the data file.')
+parser.add_argument('--data_dir', type=str, default='data/extrapolation/icews14', help='Path to the data file.')
 args = parser.parse_args()
 
 
-writer = open(args.data_dir+"/Datalogmtl_rules.txt", "w")
+
+dataloader = DataLoader(args.data_dir)
+
+writer = open(args.data_dir+"/final_Datalogmtl_rules.txt", "w")
 num_widnows = len(os.listdir(args.data_dir + "/DatalogMTL"))
 results = defaultdict(list)
 for filename in os.listdir(args.data_dir + "/DatalogMTL"):
@@ -23,7 +27,7 @@ for filename in os.listdir(args.data_dir + "/DatalogMTL"):
 
 if args.strategy == "meteor":
     # tranform the data to the format of MeTeoR
-    reasoner = DatalogMTLReasoner(f"{args.data_dir}/train.txt", data_type="quadruple")
+    reasoner = DatalogMTLReasoner(dataloader, data_type="quadruple")
 
 for rule, scores in results.items():
     if args.strategy == "maximum":
@@ -39,4 +43,3 @@ for rule, scores in results.items():
         score = score["score"]
 
     writer.write("{}\t{}\n".format(score, rule))
-    
